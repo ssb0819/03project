@@ -7,7 +7,14 @@
 	</c:if>
 	
 	<c:forEach var="i"  begin="${resultPage.beginUnitPage}" end="${resultPage.endUnitPage}" step="1">
-		<a href="javascript:fncGetList('${ i }');">${ i }</a>
+		<a href="javascript:fncGetList('${ i }');">
+		<c:if test="${ i==resultPage.currentPage }">
+		<b>${ i }</b>
+		</c:if>
+		<c:if test="${ i!=resultPage.currentPage }">
+		${ i }
+		</c:if>
+		</a>
 	</c:forEach>
 	
 	<c:if test="${ resultPage.endUnitPage < resultPage.maxPage }">

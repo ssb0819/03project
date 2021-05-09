@@ -20,6 +20,8 @@ public class UpdateUserViewAction extends Action{
 		User user=userService.getUser(userId);
 		
 		request.setAttribute("user", user);
+		String[] phone = user.getPhone().split("-");
+		request.setAttribute("phone", phone);
 		
 		return "forward:/user/updateUser.jsp";
 	}

@@ -2,23 +2,9 @@
     pageEncoding="EUC-KR"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%-- 
 <%@ page import="java.util.*"  %>
-<%@ page import="com.model2.mvc.service.domain.Product" %>
-<%@ page import="com.model2.mvc.common.util.*" %>
-<%@ page import="com.model2.mvc.common.*" %>
-    
-    <%        
-    	List<Product> list= (List<Product>)request.getAttribute("list");
-    	Page resultPage=(Page)request.getAttribute("resultPage");
-    	
-    	Search search = (Search)request.getAttribute("search");
+<%@ page import="com.model2.mvc.service.domain.*" %>
 
-    	String searchCondition = CommonUtil.null2str(search.getSearchCondition());
-    	String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
-        %>
---%>
     
 <!DOCTYPE html>
 <html>
@@ -71,11 +57,10 @@ function fncGetList(currentPage){
 		
 		<td align="right">
 			<select name="searchCondition" class="ct_input_g" style="width:80px">
-				<option value="0">상품번호</option>
-				<option value="1">상품명</option>
-				<option value="2">상품가격</option>
+				<option value="0" ${!empty search.searchCondition && search.searchCondition == 0 ? "selected" : "" }>상품번호</option>
+				<option value="1" ${!empty search.searchCondition && search.searchCondition == 1 ? "selected" : "" }>상품명</option>
 			</select>
-			<input type="text" name="searchKeyword"  class="ct_input_g" style="width:200px; height:19px" />
+			<input type="text" name="searchKeyword"  value="${ search.searchKeyword }" class="ct_input_g" style="width:200px; height:19px" />
 		</td>
 	
 		
@@ -105,53 +90,76 @@ function fncGetList(currentPage){
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
+		<td class="ct_list_b" width="150">상품번호</td>
+		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">상품명</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">가격</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">등록일</td>	
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">현재상태</td>	
+		<td class="ct_list_b">현재상태</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">주문일</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">배송요청일</td>	
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
 	</tr>	
 	<c:set var="i" value="0" />
-	<c:forEach var="product" items="${list}" >
+	<c:forEach var="purchase" items="${list}" >
 		<c:set var="i" value="${i+1}" />	
 		<tr class="ct_list_pop">
-			<td align="center">${i}</td>
-			<td></td>
-			<td align="left">
-					<a href="/updateProductView.do?prodNo=${product.prodNo}&currentPage=${search.currentPage}">${product.prodName}</a>
+			<td align="center">
+				<c:if test="${!empty purchase.tranCode }">
+					<a href="/getPurchase.do?tranNo=${purchase.tranNo}&menu=manage&currentPage=${search.currentPage}">${i}</a>
+				</c:if>
+				<c:if test="${empty purchase.tranCode }">
+					${i}
+				</c:if>
 			</td>
 			<td></td>
-			<td align="left">${product.price}</td>
+			<td align="left">${purchase.purchaseProd.prodNo}</td>
 			<td></td>
-			<td align="left">${product.regDate}</td>
+			<td align="left">
+				<c:if test="${empty purchase.tranCode }">
+					<a href="/updateProductView.do?prodNo=${purchase.purchaseProd.prodNo}&currentPage=${search.currentPage}">${purchase.purchaseProd.prodName}</a>
+				</c:if>
+				<c:if test="${!empty purchase.tranCode }">
+					${purchase.purchaseProd.prodName}
+				</c:if>
+			</td>
+			<td></td>
+			<td align="left">${purchase.purchaseProd.price}</td>
+			<td></td>
+			<td align="left">${purchase.purchaseProd.regDate}</td>
 			<td></td>		
 			<td align="left">
 			<c:choose>
-				<c:when test="${ empty product.proTranCode }">
+				<c:when test="${ empty purchase.tranCode }">
 					판매중
 				</c:when>
-				<c:when test="${ product.proTranCode.trim() == 1 }">
+				<c:when test="${ purchase.tranCode.trim() == 1 }">
 					구매완료
-					<a href="/updateTranCodeByProd.do?prodNo=${product.prodNo}&tranCode=2&currentPage=${search.currentPage}">배송하기</a>
+					<a href="/updateTranCodeByProd.do?prodNo=${purchase.purchaseProd.prodNo}&tranCode=2&currentPage=${search.currentPage}">배송하기</a>
 				</c:when>
-				<c:when test="${ product.proTranCode.trim() == 2 }">
+				<c:when test="${ purchase.tranCode.trim() == 2 }">
 					배송중
 				</c:when>
-				<c:when test="${ product.proTranCode.trim() == 3 }">
+				<c:when test="${ purchase.tranCode.trim() == 3 }">
 					배송완료
 				</c:when>
 			</c:choose>
 			</td>
-				
+			<td></td>
+			<td align="left">${purchase.orderDate}</td>
+			<td></td>
+			<td align="left">${purchase.divyDate}</td>			
 		</tr>
 	</c:forEach>
 	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+		<td colspan="15" bgcolor="D6D7D6" height="1"></td>
 	</tr>	
 	
 </table>

@@ -39,7 +39,8 @@ public class UpdatePurchaseAction extends Action {
 		
 		System.out.println("UpdatePurchaseAction.java execute() ¿Ï·á");
 		
-		return "redirect:/getPurchase.do?tranNo="+purchase.getTranNo();
+		return "redirect:/getPurchase.do?tranNo="+purchase.getTranNo()+"&currentPage="
+					+request.getParameter("currentPage");
 	}
 
 }

@@ -15,6 +15,8 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.user.UserService;
 import com.model2.mvc.service.user.impl.UserServiceImpl;
 import com.model2.mvc.service.domain.User;
+import com.model2.mvc.service.product.ProductService;
+import com.model2.mvc.service.product.impl.ProductServiceImpl;
 
 public class PurchaseDAO {
 
@@ -22,19 +24,35 @@ public class PurchaseDAO {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Purchase findPurchase(int tranNo) throws Exception{
+	public Purchase findPurchase1(int tranNo) throws Exception{
 		
-		System.out.println("findPurchase() 호출 / tranNo : " +tranNo);
-		
-		Connection con = DBUtil.getConnection();
+		System.out.println("findPurchase1() 호출 / tranNo : " +tranNo);
 
 		String sql = "SELECT * FROM transaction t, product p, users u "
 				+ " WHERE t.prod_no = p.prod_no AND"
-				+ " t.buyer_id = u.user_id AND t.tran_no = ? ORDER BY tran_no";
+				+ " t.buyer_id = u.user_id AND t.tran_no = "+tranNo+" ORDER BY tran_no";
+		
+		return this.findPurchase(sql);
+	}
+	
+	public Purchase findPurchase2(int prodNo) throws Exception{
+		
+		System.out.println("findPurchase2() 호출 / prodNo : " +prodNo);
+
+		String sql = "SELECT * FROM transaction t, product p, users u "
+				+ " WHERE t.prod_no = p.prod_no AND"
+				+ " t.buyer_id = u.user_id AND t.prod_no = "+prodNo+" ORDER BY tran_no";
+		
+		return this.findPurchase(sql);
+	}
+	
+	public Purchase findPurchase(String sql) throws Exception{
+		
+		System.out.println("findPurchase() 호출 / sql : " +sql);
+		
+		Connection con = DBUtil.getConnection();
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setInt(1, tranNo);
-
 		ResultSet rs = stmt.executeQuery();
 
 		Purchase purchase = new Purchase();
@@ -75,48 +93,11 @@ public class PurchaseDAO {
 			System.out.println("payment 공백 확인 : "+purchase.getPaymentOption().replace(' ', '!'));
 		}
 		
+		rs.close();
 		stmt.close();
 		con.close();
 		
-		System.out.println("findPurchase() 완료 / purchaseVO : "+purchase);
-
-		return purchase;
-	}
-	
-	public Purchase findPurchase2(int prodNo) throws Exception{
-		
-		System.out.println("findPurchase2() 호출 / prodNo : " +prodNo);
-		
-		Connection con = DBUtil.getConnection();
-
-		String sql = "SELECT * FROM transaction WHERE prod_no = ?";
-		
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setInt(1, prodNo);
-
-		ResultSet rs = stmt.executeQuery();
-
-		Purchase purchase = null;
-		
-		while (rs.next()) {
-			
-			purchase = new Purchase();
-			
-			purchase.setTranNo(rs.getInt("tran_no"));
-			purchase.setDivyAddr(rs.getString("dlvy_addr"));
-			purchase.setDivyDate(rs.getString("dlvy_date"));
-			purchase.setDivyRequest(rs.getString("dlvy_request"));
-			purchase.setOrderDate(rs.getDate("order_date"));
-			purchase.setPaymentOption(rs.getString("payment_option"));
-			purchase.setReceiverName(rs.getString("receiver_name"));
-			purchase.setReceiverPhone(rs.getString("receiver_phone"));
-			purchase.setTranCode(rs.getString("tran_status_code"));	
-		}
-		
-		stmt.close();
-		con.close();
-		
-		System.out.println("findPurchase2() 완료 / purchaseVO : "+purchase);
+		System.out.println("findPurchase() 완료 / purchase : "+purchase);
 
 		return purchase;
 	}
@@ -126,10 +107,10 @@ public class PurchaseDAO {
 		System.out.println("getPurchaseList() 호출 : "+buyerId);
 		
 		Connection con = DBUtil.getConnection();
-		String sql = "SELECT tran_no, buyer_id, receiver_name, receiver_phone, tran_status_code"
+		String sql = "SELECT tran_no, prod_no, buyer_id, receiver_name, receiver_phone, tran_status_code"
 					+ " FROM transaction WHERE buyer_id = '";	
 		
-		sql += buyerId + "'";
+		sql += buyerId + "' ORDER BY tran_no DESC";
 		System.out.println("getPurchaseList 첫번째 sql : "+sql);		
 
 		int total = this.getTotalCount(sql);
@@ -144,17 +125,19 @@ public class PurchaseDAO {
 		ResultSet rs = stmt.executeQuery();
 		
 		Purchase purchase = null;
-		UserService service = new UserServiceImpl();		
+		UserService service = new UserServiceImpl();
+		ProductService pServ = new ProductServiceImpl();
 		ArrayList<Purchase> list = new ArrayList<Purchase>();		
 		
 		while(rs.next()) {
 			purchase = new Purchase();
 			purchase.setTranNo(rs.getInt("tran_no"));
+			purchase.setPurchaseProd(pServ.getProduct(rs.getInt("prod_no")));
 			purchase.setBuyer(service.getUser(rs.getString("buyer_id")));
 			purchase.setReceiverName(rs.getString("receiver_name"));
 			purchase.setReceiverPhone(rs.getString("receiver_phone"));
 			purchase.setTranCode(rs.getString("tran_status_code"));
-			System.out.println("tranCode 공백 확인 : "+purchase.getTranCode().replace(' ', '!'));
+			//System.out.println("tranCode 공백 확인 : "+purchase.getTranCode().replace(' ', '!'));
 			System.out.println("purchaseVO 세팅 완료 : "+purchase);
 	
 			list.add(purchase);			
@@ -177,18 +160,21 @@ public class PurchaseDAO {
 		
 		Connection con = DBUtil.getConnection();
 		
-		String sql = "SELECT * FROM product";
+		String sql = "SELECT p.prod_no, p.prod_name, p.price, p.reg_date, t.tran_no, t.tran_status_code,"
+				+ " t.order_date, t.dlvy_date "
+				+ " FROM product p, transaction t"
+				+ " WHERE p.prod_no = t.prod_no(+)";
 		if (search.getSearchCondition() != null) {
 			if (search.getSearchCondition().equals("0")) {
-				sql += " WHERE prod_no LIKE '%" + search.getSearchKeyword()
+				sql += " AND p.prod_no LIKE '%" + search.getSearchKeyword()
 						+ "%'";
 			} else if (search.getSearchCondition().equals("1")) {
-				sql += " WHERE prod_name LIKE '%" + search.getSearchKeyword()
+				sql += " AND p.prod_name LIKE '%" + search.getSearchKeyword()
 						+ "%'";
 			}
 		}
-		sql += " ORDER BY prod_no";
-		
+		sql += " ORDER BY t.tran_no DESC NULLS LAST";
+
 		System.out.println("SQL : "+sql);
 
 		int total = this.getTotalCount(sql);
@@ -202,23 +188,29 @@ public class PurchaseDAO {
 		PreparedStatement stmt = con.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 
-		List<Product> list = new ArrayList<Product>();		
+		List<Purchase> list = new ArrayList<Purchase>();		
+		Purchase purchase = null;
 		Product product = null;
 		
 		while(rs.next()) {
+				purchase = new Purchase();
 				product = new Product();
+				
 				product.setProdNo(rs.getInt("prod_no"));
 				product.setProdName(rs.getString("prod_name"));
-				product.setProdDetail(rs.getString("prod_detail"));
-				product.setManuDate(rs.getString("manufacture_day"));
 				product.setPrice(rs.getInt("price"));
-				product.setFileName(rs.getString("image_file"));
 				product.setRegDate(rs.getDate("reg_date"));
-				if(this.findPurchase2(product.getProdNo())!=null) {
-					product.setProTranCode(this.findPurchase2(product.getProdNo()).getTranCode());
+				product.setProTranCode(rs.getString("tran_status_code"));
+				purchase.setTranNo(rs.getInt("tran_no"));
+				purchase.setPurchaseProd(product);
+				purchase.setTranCode(rs.getString("tran_status_code"));
+				purchase.setOrderDate(rs.getDate("order_date"));
+				if(rs.getString("dlvy_date") != null){
+					purchase.setDivyDate(rs.getString("dlvy_date").substring(0, 10));
 				}
-				list.add(product);
-				System.out.println("list.add -> product : "+product);
+
+				list.add(purchase);
+				System.out.println("list.add -> purchase : "+purchase);
 		}
 		
 		System.out.println("list.size() : "+ list.size());

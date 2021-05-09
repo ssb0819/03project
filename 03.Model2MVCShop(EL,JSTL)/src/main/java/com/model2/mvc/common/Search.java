@@ -8,6 +8,8 @@ public class Search {
 	private String searchCondition;
 	private String searchKeyword;
 	private int pageSize;
+	private int searchPriceMin;
+	private int searchPriceMax;
 	
 	///Constructor
 	public Search() {
@@ -39,6 +41,22 @@ public class Search {
 	}
 	public void setSearchKeyword(String searchKeyword) {
 		this.searchKeyword = searchKeyword;
+	}
+
+	public int getSearchPriceMin() {
+		return searchPriceMin;
+	}
+
+	public void setSearchPriceMin(int searchPriceMin) {
+		this.searchPriceMin = searchPriceMin;
+	}
+
+	public int getSearchPriceMax() {
+		return searchPriceMax;
+	}
+
+	public void setSearchPriceMax(int searchPriceMax) {
+		this.searchPriceMax = searchPriceMax;
 	}
 
 	@Override

@@ -151,6 +151,31 @@ public class UserDao {
 		con.close();
 	}
 	
+	public void deleteUser(String userId) throws Exception{
+		
+		System.out.println("deleteUser() 호출 / userid : "+userId);
+		
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "DELETE FROM users WHERE user_id = ?";
+		
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		pStmt.setString(1, userId);
+		
+		int i = pStmt.executeUpdate();
+		
+		pStmt.close();
+		con.close();
+		
+		if(i==1) {
+			System.out.println("DELETE 완료");
+		}else {
+			System.out.println("DELETE 실패");
+		}
+		
+	}
+		
+	
 	// 게시판 Page 처리를 위한 전체 Row(totalCount)  return
 	private int getTotalCount(String sql) throws Exception {
 		

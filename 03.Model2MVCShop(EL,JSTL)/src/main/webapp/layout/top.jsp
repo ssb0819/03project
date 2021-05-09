@@ -1,10 +1,14 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%-- 
 <%@ page import="com.model2.mvc.service.domain.User" %>
 
 <%
 	User user=(User)session.getAttribute("user");
 %>
+--%>
 
 <html>
 <head>
@@ -29,15 +33,15 @@
 	    <table width="200" border="0" cellspacing="0" cellpadding="0">
 	        <tr> 
 	          <td width="115">
-		          <%	if(user == null) { %>
+		          <c:if test="${ empty user }">
 		              <a href="/user/loginView.jsp" target="rightFrame">login</a>   
-		          <%}%>        
+		          </c:if>       
 	          </td>
 	          <td width="14">&nbsp;</td>
 	          <td width="56">
-		          <% if(user != null) {  %>
+		          <c:if test="${ !empty user }">
 		            	<a href="/logout.do" target="_parent">logout</a>  
-		           <% } %>
+		          </c:if>
 	          </td>
 	        </tr>
 	      </table>

@@ -31,9 +31,28 @@ public class ListProductAction extends Action {
 		}
 		
 		search.setCurrentPage(currentPage);
-		search.setSearchCondition(request.getParameter("searchCondition"));
 		search.setSearchKeyword(request.getParameter("searchKeyword"));
-		System.out.println("request 키워드 : "+request.getParameter("searchKeyword"));
+		
+		String searchPriceMin = request.getParameter("searchPriceMin");
+		String searchPriceMax = request.getParameter("searchPriceMax");
+		
+		try {
+			if(searchPriceMin!=null && searchPriceMin.length()>0) {
+				search.setSearchPriceMin(Integer.parseInt(searchPriceMin));
+			}
+			if(searchPriceMax!=null && searchPriceMax.length()>0) {
+				search.setSearchPriceMax(Integer.parseInt(searchPriceMax));
+			}
+		}catch(NumberFormatException e) {
+			System.out.println("////searchPrice 숫자가 아닌 값 입력됨/////");
+			e.printStackTrace();
+		}catch(Exception e) {
+			System.out.println("////searchPrice 기타 Exception 발생////");
+			e.printStackTrace();
+		}
+
+		System.out.println("search 검색어 : "+search.getSearchKeyword());
+		System.out.println("search 가격 : "+search.getSearchPriceMin()+" ~ "+search.getSearchPriceMax());
 		
 		int pageSize = Integer.parseInt( getServletContext().getInitParameter("pageSize"));
 		int pageUnit  =  Integer.parseInt(getServletContext().getInitParameter("pageUnit"));

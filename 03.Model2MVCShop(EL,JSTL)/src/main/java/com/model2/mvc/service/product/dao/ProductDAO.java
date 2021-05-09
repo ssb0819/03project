@@ -11,8 +11,6 @@ import java.util.Map;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.common.util.DBUtil;
 import com.model2.mvc.service.domain.Product;
-import com.model2.mvc.service.purchase.PurchaseService;
-import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 
 public class ProductDAO {
 
@@ -58,21 +56,23 @@ public class ProductDAO {
 
 	
 	public Map<String,Object> getProductList(Search search) throws Exception {
+				
+		String sql = "SELECT p.prod_no, p.prod_name, p.price, p.prod_detail, t.tran_status_code"
+				+ " FROM product p, transaction t"
+				+ " WHERE p.prod_no = t.prod_no(+)";
 		
-		Connection con = DBUtil.getConnection();
-		
-		String sql = "SELECT prod_no, prod_name, prod_detail, price, image_file, reg_date,"
-					+ " manufacture_day FROM product ";
-		if (search.getSearchCondition() != null) {
-			if (search.getSearchCondition().equals("0")) {
-				sql += " WHERE prod_no LIKE '%" + search.getSearchKeyword()
-						+ "%'";
-			} else if (search.getSearchCondition().equals("1")) {
-				sql += " WHERE prod_name LIKE '%" + search.getSearchKeyword()
+			if (search.getSearchKeyword()!=null) {
+				sql += " AND p.prod_name LIKE '%" + search.getSearchKeyword()
 						+ "%'";
 			}
+
+		if(search.getSearchPriceMin()>0) {
+			sql += " AND p.price >= "+search.getSearchPriceMin();
 		}
-		sql += " ORDER BY prod_no";
+		if(search.getSearchPriceMax()>0) {
+			sql += " AND p.price <= "+search.getSearchPriceMax();
+		}
+		sql += " ORDER BY t.tran_status_code NULLS FIRST, p.prod_no DESC";
 		
 		System.out.println("SQL : "+sql);
 
@@ -84,28 +84,24 @@ public class ProductDAO {
 
 		sql=this.makeCurrentPageSql(sql, search);
 		
+		Connection con = DBUtil.getConnection();
 		PreparedStatement stmt = con.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 
 		List<Product> list = new ArrayList<Product>();		
 		Product product = null;
 		
-		PurchaseService pServ = new PurchaseServiceImpl();
-		
 		while(rs.next()) {
 				product = new Product();
 				product.setProdNo(rs.getInt("prod_no"));
 				product.setProdName(rs.getString("prod_name"));
-				product.setProdDetail(rs.getString("prod_detail"));
-				product.setManuDate(rs.getString("manufacture_day"));
 				product.setPrice(rs.getInt("price"));
-				product.setFileName(rs.getString("image_file"));
-				product.setRegDate(rs.getDate("reg_date"));
+				product.setProdDetail(rs.getString("prod_detail"));
 				
-				if(pServ.getPurchase2(product.getProdNo())!=null) {
-					product.setProTranCode("재고없음");
-				}else {
+				if(rs.getString("tran_status_code")==null) {
 					product.setProTranCode("판매중");
+				}else {
+					product.setProTranCode("재고없음");
 				}
 				list.add(product);
 				System.out.println("list.add -> product : "+product);

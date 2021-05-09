@@ -48,7 +48,7 @@ public class AddPurchaseAction extends Action {
 		request.setAttribute("purchase", purchase);
 		
 		System.out.println("addPurchase() ¿Ï·á");
-		return "forward:/purchase/addPurchase.jsp";
+		return "redirect:/getPurchase.do?prodNo="+request.getParameter("prodNo");
 	}
 
 }

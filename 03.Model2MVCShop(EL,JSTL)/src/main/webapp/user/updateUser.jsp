@@ -149,11 +149,11 @@ function resetData() {
 				<option value="019" <%= phone1.equals("019") ? "selected" : "" %> >019</option>
 				--%>
 				
-				<option value="010" ${ ! empty user.phone1 && user.phone1 == "010" ? "selected" : ""  } >010</option>
-				<option value="011" ${ ! empty user.phone1 && user.phone1 == "011" ? "selected" : ""  } >011</option>
-				<option value="016" ${ ! empty user.phone1 && user.phone1 == "016" ? "selected" : ""  } >016</option>
-				<option value="018" ${ ! empty user.phone1 && user.phone1 == "018" ? "selected" : ""  } >018</option>
-				<option value="019" ${ ! empty user.phone1 && user.phone1 == "019" ? "selected" : ""  } >019</option>
+				<option value="010" ${ ! empty phone[0] && phone[0] == "010" ? "selected" : ""  } >010</option>
+				<option value="011" ${ ! empty phone[0] && phone[0] == "011" ? "selected" : ""  } >011</option>
+				<option value="016" ${ ! empty phone[0] && phone[0] == "016" ? "selected" : ""  } >016</option>
+				<option value="018" ${ ! empty phone[0] && phone[0] == "018" ? "selected" : ""  } >018</option>
+				<option value="019" ${ ! empty phone[0] && phone[0] == "019" ? "selected" : ""  } >019</option>
 				
 			</select>
 			<%--  <input 	type="text" name="phone2" value="<%= phone2.equals("")? "" : phone2 %>" 
@@ -163,10 +163,10 @@ function resetData() {
 							class="ct_input_g"  style="width:100px; height:19px"  maxLength="9" >
 			<input type="hidden" name="phone" class="ct_input_g"  />     --%>
 			
-			<input 	type="text" name="phone2" value="${ ! empty user.phone2 ? user.phone2 : ''}" 
+			<input 	type="text" name="phone2" value="${ ! empty phone[1] ? phone[1] : ''}" 
 							class="ct_input_g" style="width:100px; height:19px"  maxLength="9" >
 			- 
-			<input 	type="text" name="phone3" value="${ ! empty user.phone3 ? user.phone3 : ''}"  
+			<input 	type="text" name="phone3" value="${ ! empty phone[2] ? phone[2] : ''}"  
 							class="ct_input_g"  style="width:100px; height:19px"  maxLength="9" >
 							
 			<input type="hidden" name="phone" class="ct_input_g"  />

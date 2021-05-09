@@ -63,7 +63,7 @@
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">회원ID</td>
+		<td class="ct_list_b" width="150">상품명</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">회원명</td>
 		<td class="ct_line02"></td>
@@ -82,11 +82,11 @@
 		<c:set var="i" value="${i+1}"/>	
 		<tr class="ct_list_pop">
 			<td align="center">
-				<a href="/getPurchase.do?tranNo=${purchase.tranNo}">${i}</a>
+				<a href="/getPurchase.do?tranNo=${purchase.tranNo}&menu=search&currentPage=${search.currentPage}">${i}</a>
 			</td>
 			<td></td>
 			<td align="left">
-				<a href="/getUser.do?userId=${purchase.buyer.userId}">${purchase.buyer.userId}</a>
+				<a href="/getProduct.do?prodNo=${purchase.purchaseProd.prodNo}">${purchase.purchaseProd.prodName}</a>
 			</td>
 			<td></td>
 			<td align="left">${purchase.receiverName}</td>

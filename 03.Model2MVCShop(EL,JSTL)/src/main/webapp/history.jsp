@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=EUC-KR" %>
-
+<%@ page import="java.net.URLDecoder" %>
 <html>
 <head>
 
@@ -24,12 +24,13 @@
 			
 			if (cookie.getName() != null && cookie.getName().startsWith("history")) {
 				
-				history = cookie.getValue();
+				String prodNo = cookie.getName().substring(7);
+				String prodName = URLDecoder.decode(cookie.getValue());
 				System.out.println(cookie.getName());
 				System.out.println(history);
 			
 				%>
-				<a href="/getProduct.do?prodNo=<%=history%>&menu=search" target="rightFrame"><%=history%></a>
+				<a href="/getProduct.do?prodNo=<%=prodNo%>&menu=search" target="rightFrame"><%=prodName%></a>
 				<br>
 				<%
 			}

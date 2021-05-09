@@ -36,6 +36,7 @@ System.out.println("request ¿¡¼­ purchaseVO ²¨³¿ : "+purchase);
 
 <form name="updatePurchase" method="post"	action="/updatePurchase.do">
 
+<input type="hidden" name="currentPage" value="${param.currentPage}"/>
 <input type="hidden" name="tranNo" value="${purchase.tranNo}"/>
 
 <table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">

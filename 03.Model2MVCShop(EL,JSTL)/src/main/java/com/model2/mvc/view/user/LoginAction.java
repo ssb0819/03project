@@ -23,6 +23,7 @@ public class LoginAction extends Action{
 		UserService userService=new UserServiceImpl();
 		User dbUser=userService.loginUser(user);
 		
+		//이전에 남아있던 최근 본 상품목록 삭제
 		Cookie[] cookies = request.getCookies();		
 		if (cookies!=null && cookies.length > 0) {
 			

@@ -31,7 +31,7 @@ public class ListPurchaseAction extends Action {
 		String buyerId = user.getUserId();
 		
 		int currentPage=1;
-		if(request.getParameter("currentPage") != null) {
+		if(request.getParameter("currentPage") != null && request.getParameter("currentPage").length()>0) {
 			currentPage=Integer.parseInt(request.getParameter("currentPage"));
 		}
 		Search search = new Search();

@@ -18,15 +18,21 @@ public class GetPurchaseAction extends Action {
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		
-		int tranNo=Integer.parseInt(request.getParameter("tranNo"));
-		
 		PurchaseService service=new PurchaseServiceImpl();
-		Purchase purchase = service.getPurchase(tranNo);
+		Purchase purchase = null;
+		
+		if(request.getParameter("tranNo")!=null) {
+			int tranNo=Integer.parseInt(request.getParameter("tranNo"));
+			purchase = service.getPurchase(tranNo);
+		}
+		if(request.getParameter("prodNo")!=null) {
+			int prodNo=Integer.parseInt(request.getParameter("prodNo"));
+			purchase = service.getPurchase2(prodNo);
+		}
 		
 		request.setAttribute("purchase", purchase);
 		
-		return "forward:/purchase/getPurchase.jsp";
-		
+		return "forward:/purchase/getPurchase.jsp";		
 	}
 
 }
