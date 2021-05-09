@@ -38,6 +38,12 @@ public class ProductServiceImpl implements ProductService {
 	public void updateProduct(Product productVO) throws Exception {
 		// TODO Auto-generated method stub
 		productDAO.updateProduct(productVO);		
-	}	
+	}
+
+	@Override
+	public void deleteProduct(int prodNo) throws Exception {
+		// TODO Auto-generated method stub
+		productDAO.deleteProduct(prodNo);
+	}		
 
 }

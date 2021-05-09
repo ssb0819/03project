@@ -60,4 +60,10 @@ public class PurchaseServiceImpl implements PurchaseService {
 		dao.updateTranCode(purchase);
 	}
 
+	@Override
+	public void deletePurchase(int tranNo) throws Exception {
+		// TODO Auto-generated method stub
+		dao.deletePurchase(tranNo);
+	}
+
 }

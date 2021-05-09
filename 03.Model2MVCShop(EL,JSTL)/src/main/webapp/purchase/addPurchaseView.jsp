@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
+<%@ page language="java" contentType="text/html; charset=EUC-KR" 
     pageEncoding="EUC-KR"%>
 
 <%-- 
@@ -17,7 +17,7 @@
 
 <title>상품상세조회</title>
 
-<script type="text/javascript" src="../javascript/calendar.js">
+<script type="text/javascript" src="../javascript/calendar.js" >
 </script>
 
 <script type="text/javascript">

@@ -166,6 +166,29 @@ public class ProductDAO {
 		System.out.println("UPDATE 완료");
 	}
 	
+	public void deleteProduct(int prodNo) throws Exception{
+		
+		System.out.println("deleteProduct() 호출 / prodNo : "+prodNo);
+		
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "DELETE FROM product WHERE prod_no = ?";
+		
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		pStmt.setInt(1, prodNo);
+		
+		int i = pStmt.executeUpdate();
+		
+		pStmt.close();
+		con.close();
+		
+		if(i==1) {
+			System.out.println("DELETE 완료");
+		}else {
+			System.out.println("DELETE 실패");
+		}
+	}
+	
 	
 	private int getTotalCount(String sql) throws Exception {
 		

@@ -303,6 +303,29 @@ public class PurchaseDAO {
 		
 	}
 	
+	public void deletePurchase(int tranNo) throws Exception{
+		
+		System.out.println("deletePurchase() 호출 / tranNo : "+tranNo);
+		
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "DELETE FROM transaction WHERE tran_no = ?";
+		
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		pStmt.setInt(1, tranNo);
+		
+		int i = pStmt.executeUpdate();
+		
+		pStmt.close();
+		con.close();
+		
+		if(i==1) {
+			System.out.println("DELETE 완료");
+		}else {
+			System.out.println("DELETE 실패");
+		}
+	}
+	
 	private int getTotalCount(String sql) throws Exception {
 		
 		sql = "SELECT COUNT(*) "+

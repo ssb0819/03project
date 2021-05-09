@@ -22,4 +22,6 @@ public interface PurchaseService {
 	
 	public void updateTranCode(Purchase purchase) throws Exception;
 	
+	public void deletePurchase(int tranNo) throws Exception;
+	
 }

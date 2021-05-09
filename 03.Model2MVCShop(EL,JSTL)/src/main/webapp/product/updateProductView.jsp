@@ -22,7 +22,7 @@ System.out.println("updateProductView.jsp currentPage : "+request.getParameter("
 </script>
 
 <script type="text/javascript">
-<!--
+
 function fncAddProduct(){
 	//Form 유효성 검증
  	var name = document.detailForm.prodName.value;
@@ -50,7 +50,14 @@ function fncAddProduct(){
 	document.detailForm.action='/updateProduct.do';
 	document.detailForm.submit();
 }
--->
+
+function fncDeleteProduct() {
+	var prodNo = document.detailForm.prodNo.value;
+	
+	popWin 
+		= window.open("/product/deleteProduct.jsp?prodNo="+prodNo,"popWin", "left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
+}
+
 </script>
 </head>
 
@@ -159,6 +166,17 @@ function fncAddProduct(){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
+		<td align="left">
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23"></td>
+					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
+						<a href="javascript:fncDeleteProduct();">삭제</a>
+					</td>
+					<td width="14" height="23"><img src="/images/ct_btnbg03.gif" width="14" height="23"></td>
+				</tr>
+			</table>
+		</td>
 		<td width="53%"></td>
 		<td align="right">
 			<table border="0" cellspacing="0" cellpadding="0">
