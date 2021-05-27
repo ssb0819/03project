@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-<!--
+
 function fncAddUser() {
 	// Form 유효성 검증
 	var id=document.detailForm.userId.value;
@@ -96,7 +96,7 @@ function fncCheckDuplication() {
 function resetData() {
 	document.detailForm.reset();
 }
--->
+
 </script>
 </head>
 

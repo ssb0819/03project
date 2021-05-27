@@ -149,6 +149,7 @@ function fncDeletePurchase() {
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
+		<c:if test="${purchase.tranCode.trim() == 1 && (empty param.menu || param.menu == 'search')}">
 		<td align="left">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -160,6 +161,7 @@ function fncDeletePurchase() {
 				</tr>
 			</table>
 		</td>
+		</c:if>
 		<td width="53%"></td>
 		<td align="right">
 			<table border="0" cellspacing="0" cellpadding="0">

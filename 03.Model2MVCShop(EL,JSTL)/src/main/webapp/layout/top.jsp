@@ -12,7 +12,7 @@
 
 <html>
 <head>
-<title>Model2 MVC Shop</title>
+<title>Used Item Shop</title>
 
 <link href="/css/left.css" rel="stylesheet" type="text/css">
 
@@ -26,7 +26,7 @@
 	<td height="10" >&nbsp;</td>
   </tr>
   <tr>
-    <td width="800" height="30"><h2>Model2 MVC Shop</h2></td>
+    <td width="800" height="30"><h2>Used Item Shop</h2></td>
   </tr>
   <tr>
     <td height="20" align="right" background="/images/img_bg.gif">

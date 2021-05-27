@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-<!--
+
 	function fncLogin() {
 		var id=document.loginForm.userId.value;
 		var pw=document.loginForm.password.value;
@@ -29,7 +29,7 @@
 	window.onload = function(){
 		document.getElementById("userId").focus();
 	}
--->
+
 </script>
 
 </head>

@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-<!--
+
 window.onload = function(){
 	document.getElementById("userId").focus();
 	document.getElementById("userId").onkeydown = function(){
@@ -46,7 +46,7 @@ function fncUseId() {
 	}
 	window.close();
 }
--->
+
 </script>
 </head>
 
